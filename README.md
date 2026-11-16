@@ -33,16 +33,18 @@ The authorized issuer uploads a valid, registered credential in the Manage Crede
 
 ## Install and run
 
-From the project folder in PowerShell:
+Run all commands below from the project root directory in Windows PowerShell:
 
 ```powershell
+python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-streamlit run app.py
+python -m pip install -r requirements.txt
+python -c "from solcx import install_solc; install_solc('0.8.20')"
+python -m streamlit run app.py
 ```
 
-Open the local URL shown by Streamlit. The Solidity compiler version 0.8.20 must be installed for Py-Solc-X before starting the app.
+Open the local URL shown by Streamlit.
 
 ## Local blockchain limitations
 
-The app uses Ethereum Tester and Py-EVM, which run entirely in memory. The first Streamlit session creates and deploys a fresh contract, and cached resources preserve it during reruns in that application process. Restarting Streamlit resets the blockchain, contract, and all issued or revoked records. This project has no persistent database, network blockchain, wallets, private keys, login system, or production security controls.
+The app uses Ethereum Tester and Py-EVM, which run entirely in memory. The first Streamlit session creates and deploys a fresh contract, and cached resources preserve it during reruns in that application process. Restarting the application resets the blockchain, contract, and all issued or revoked records. This project has no persistent database, network blockchain, wallets, private keys, login system, or production security controls.
