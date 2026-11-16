@@ -101,14 +101,8 @@ st.write(
     "Issue, verify, and revoke digital credential fingerprints on a local "
     "blockchain. Personal information stays inside the downloaded credential file."
 )
-st.info(
-    "Local demonstration: restarting Streamlit creates a fresh in-memory blockchain "
-    "and removes all registered records."
-)
-
 try:
     web3, registry, issuer_account = connect_blockchain()
-    st.success(f"Blockchain connected. Authorized issuer: {issuer_account}")
 except Exception as error:
     st.error(f"Blockchain setup failed: {error}")
     st.stop()
