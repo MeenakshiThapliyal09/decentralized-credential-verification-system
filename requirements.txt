@@ -1,1 +1,6 @@
 streamlit==1.66.1
+web3==8.0.0
+eth-tester==0.14.0b1
+py-evm==0.12.1b1
+py-solc-x==2.1.0
+pycryptodome==3.24.1

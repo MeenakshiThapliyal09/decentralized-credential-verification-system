@@ -1,52 +1,48 @@
 # Decentralized Credential Verification System
 
-**Status: In Development**
+An educational college mini project that demonstrates how a blockchain can help verify digital credentials. It is a local demonstration, not a production deployment.
 
-## Project overview
+## Problem and purpose
 
-This college mini project is planned to help check that a digital credential is genuine and has not been changed. Today, someone may need to contact the issuer directly to check a document. This project aims to make checking easier by storing a credential's cryptographic fingerprint on a local blockchain. The credential itself is not planned to be stored on the blockchain.
+Checking whether a certificate is authentic can require contacting the issuing institution. This application lets an authorized issuer register a SHA-256 fingerprint of a credential on a local blockchain. Anyone with the JSON credential can check whether it is unchanged, registered, and not revoked.
 
-## Planned workflow
+No student name, course, institution, certificate ID, or other personal information is stored on the blockchain. The blockchain stores only a `bytes32` fingerprint and its status.
 
-1. An authorized issuer creates a credential.
-2. The application generates a credential file.
-3. The credential's cryptographic fingerprint is registered on the blockchain.
-4. A user uploads a credential for verification. The application will calculate its fingerprint and compare it with the blockchain record.
-5. An authorized issuer can revoke a credential so it is no longer considered valid.
+## Technologies
 
-## Planned technology stack
+- Python 3.12
+- Streamlit 1.66.1
+- Solidity 0.8.20
+- Web3.py 8.0.0
+- Ethereum Tester with Py-EVM
+- Py-Solc-X
 
-- **Python 3.12** - application logic and credential file handling.
-- **Streamlit** - the web-based user interface for issuers and users.
-- **Solidity** - the smart contract planned to register fingerprints and support revocation.
-- **Web3.py** - communication between the Python application and the blockchain.
-- **Ethereum Tester** - the local blockchain testing environment for development.
-- **Git and GitHub** - version control and hosting the project source code.
+## How it works
 
-## Planned features
+### Issue a credential
 
-- Issuer flow for creating a credential file.
-- Fingerprint registration through a Solidity smart contract.
-- Credential upload and fingerprint-based verification.
-- Revocation by an authorized issuer.
-- A simple Streamlit interface for the planned actions.
+The issuer enters the student name, course, institution, certificate ID, and issue date. The app adds a random salt, creates a SHA-256 fingerprint from a consistently serialized JSON structure, and registers that fingerprint through the smart contract. Download the generated JSON file and keep it safe.
 
-These features are planned and may change during development.
+### Verify a credential
 
-## Basic setup (planned)
+Upload the JSON credential. The app recalculates the SHA-256 fingerprint and first checks it against the fingerprint saved in the file. It then asks the smart contract whether that fingerprint exists and whether it was revoked. A credential is valid only when all three checks succeed.
 
-The following steps describe the planned development setup. Application code and dependency files have not been created yet.
+### Revoke a credential
 
-1. Install Python 3.12 and Git. Ethereum Tester will provide the local blockchain testing environment.
-2. Open this project folder in VS Code.
-3. Create and activate a virtual environment in the project folder:
+The authorized issuer uploads a valid, registered credential in the Manage Credentials tab and selects **Revoke Credential**. The smart contract prevents anyone other than its owner from issuing or revoking credentials, and prevents repeat revocation.
 
-   ```powershell
-   python -m venv .venv
-   .\.venv\Scripts\Activate.ps1
-   ```
+## Install and run
 
-4. When a dependency list is added, install the project packages into the active environment.
-5. Configure the application to use Ethereum Tester when the blockchain connection is added.
+From the project folder in PowerShell:
 
-No project features are claimed as implemented or tested at this stage.
+```powershell
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+Open the local URL shown by Streamlit. The Solidity compiler version 0.8.20 must be installed for Py-Solc-X before starting the app.
+
+## Local blockchain limitations
+
+The app uses Ethereum Tester and Py-EVM, which run entirely in memory. The first Streamlit session creates and deploys a fresh contract, and cached resources preserve it during reruns in that application process. Restarting Streamlit resets the blockchain, contract, and all issued or revoked records. This project has no persistent database, network blockchain, wallets, private keys, login system, or production security controls.
